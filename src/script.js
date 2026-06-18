@@ -32,6 +32,7 @@ const typeFilter = document.getElementById("type-selector");
 const genFilter = document.getElementById("gen-selector");
 const loadingScreen = document.getElementById("loading");
 const mainApp = document.getElementById("app");
+const toggle = document.getElementById("theme-toggle");
 
 let allPokemon = [];
 
@@ -165,6 +166,17 @@ genFilter.addEventListener("change", () => {
     populatePokemonSelects();
 });
 
+toggle.addEventListener("change", () => {
+    document.body.classList.toggle(
+        "darkmode",
+        toggle.checked
+    );
+
+    localStorage.setItem(
+        "theme",
+        toggle.checked ? "darkmode" : "light"
+    );
+});
 // CARDS LOGIC //
 
 pokemonCards.forEach(card => {
@@ -281,6 +293,13 @@ async function init() {
     await populatePokemonSelects();
     await populateItemSelects();
     await loadParty();
+}
+
+const savedTheme = localStorage.getItem("theme");
+
+if (savedTheme === "darkmode") {
+    document.body.classList.add("darkmode");
+    document.getElementById("theme-toggle").checked = true;
 }
 
 init();

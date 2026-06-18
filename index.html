@@ -16,6 +16,14 @@
 
 <body>
 
+    <div class="theme-switch-wrapper">
+        <span class="switch-label">Dark Mode</span>
+        <label class="theme-switch">
+            <input type="checkbox" id="theme-toggle">
+            <span class="slider"></span>
+        </label>
+    </div>
+
     <header class="header">
         <h1>Pokemon Party Planner</h1>
         <p>Generation 1 to 5</p>
@@ -30,24 +38,24 @@
             <div class="filter-container">
                 <select id="type-selector" class="type-select" name="type-filter">
                     <option value="">All Types</option>
-                    <option value="bug">Bug</option>
-                    <option value="dark">Dark</option>
-                    <option value="dragon">Dragon</option>
-                    <option value="electric">Electric</option>
-                    <option value="fairy">Fairy</option>
-                    <option value="fighting">Fighting</option>
-                    <option value="fire">Fire</option>
-                    <option value="flying">Flying</option>
-                    <option value="ghost">Ghost</option>
-                    <option value="grass">Grass</option>
-                    <option value="ground">Ground</option>
-                    <option value="ice">Ice</option>
-                    <option value="normal">Normal</option>
-                    <option value="poison">Poison</option>
-                    <option value="psychic">Psychic</option>
-                    <option value="rock">Rock</option>
-                    <option value="steel">Steel</option>
-                    <option value="water">Water</option>
+                    <option value="bug" class="bug">Bug</option>
+                    <option value="dark" class="dark">Dark</option>
+                    <option value="dragon" class="dragon">Dragon</option>
+                    <option value="electric" class="electric">Electric</option>
+                    <option value="fairy" class="fairy">Fairy</option>
+                    <option value="fighting" class="fighting">Fighting</option>
+                    <option value="fire" class="fire">Fire</option>
+                    <option value="flying" class="flying">Flying</option>
+                    <option value="ghost" class="ghost">Ghost</option>
+                    <option value="grass" class="grass">Grass</option>
+                    <option value="ground" class="ground">Ground</option>
+                    <option value="ice" class="ice">Ice</option>
+                    <option value="normal" class="normal">Normal</option>
+                    <option value="poison" class="poison">Poison</option>
+                    <option value="psychic" class="psychic">Psychic</option>
+                    <option value="rock" class="rock">Rock</option>
+                    <option value="steel" class="steel">Steel</option>
+                    <option value="water" class="water">Water</option>
                 </select>
 
                 <select id="gen-selector" class="gen-select" name="gen-filter">
@@ -59,7 +67,7 @@
                     <option value="5">Unova</option>
                 </select>
 
-                
+
             </div>
 
             <section class="pokemon-party-display">
@@ -77,8 +85,8 @@
                         </div>
 
                         <div class="field pokemon-image">
-                            <img id="pokemon-img-1" class="pokemon-img"
-                                src="assets/unknown_sprite.png" alt="Selected Pokemon sprite">
+                            <img id="pokemon-img-1" class="pokemon-img" src="assets/unknown_sprite.png"
+                                alt="Selected Pokemon sprite">
                         </div>
 
                         <div class="field pokemon-item">
@@ -140,8 +148,8 @@
                         </div>
 
                         <div class="field pokemon-image">
-                            <img id="pokemon-img-2" class="pokemon-img"
-                                src="assets/unknown_sprite.png" alt="Selected Pokemon sprite">
+                            <img id="pokemon-img-2" class="pokemon-img" src="assets/unknown_sprite.png"
+                                alt="Selected Pokemon sprite">
                         </div>
 
                         <div class="field pokemon-item">
@@ -200,8 +208,8 @@
                         </div>
 
                         <div class="field pokemon-image">
-                            <img id="pokemon-img-3" class="pokemon-img"
-                                src="assets/unknown_sprite.png" alt="Selected Pokemon sprite">
+                            <img id="pokemon-img-3" class="pokemon-img" src="assets/unknown_sprite.png"
+                                alt="Selected Pokemon sprite">
                         </div>
 
                         <div class="field pokemon-item">
@@ -260,8 +268,8 @@
                         </div>
 
                         <div class="field pokemon-image">
-                            <img id="pokemon-img-4" class="pokemon-img"
-                                src="assets/unknown_sprite.png" alt="Selected Pokemon sprite">
+                            <img id="pokemon-img-4" class="pokemon-img" src="assets/unknown_sprite.png"
+                                alt="Selected Pokemon sprite">
                         </div>
 
                         <div class="field pokemon-item">
@@ -320,8 +328,8 @@
                         </div>
 
                         <div class="field pokemon-image">
-                            <img id="pokemon-img-5" class="pokemon-img"
-                                src="assets/unknown_sprite.png" alt="Selected Pokemon sprite">
+                            <img id="pokemon-img-5" class="pokemon-img" src="assets/unknown_sprite.png"
+                                alt="Selected Pokemon sprite">
                         </div>
 
                         <div class="field pokemon-item">
@@ -380,8 +388,8 @@
                         </div>
 
                         <div class="field pokemon-image">
-                            <img id="pokemon-img-6" class="pokemon-img"
-                                src="assets/unknown_sprite.png" alt="Selected Pokemon sprite">
+                            <img id="pokemon-img-6" class="pokemon-img" src="assets/unknown_sprite.png"
+                                alt="Selected Pokemon sprite">
                         </div>
 
                         <div class="field pokemon-item">
