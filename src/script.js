@@ -148,6 +148,8 @@ async function populateItemSelects() {
     const sortedItems = data.items.sort((a, b) => a.name.localeCompare(b.name));
 
     document.querySelectorAll(".item-select").forEach(select => {
+        
+        select.innerHTML = "";
         sortedItems.forEach(item => {
             const option = document.createElement("Option");
             option.value = item.name;
