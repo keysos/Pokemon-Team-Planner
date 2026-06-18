@@ -161,6 +161,7 @@ select {
     background-color: var(--card);
     font-size: 1.2rem;
     cursor: pointer;
+    color: inherit;
     transition: background 0.2s ease;
 }
 
