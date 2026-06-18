@@ -103,7 +103,6 @@ body {
   display: flex;
   margin-bottom: 14px;
   width: 100%;
-  gap: 30px;
 }
 
 #app {
@@ -138,43 +137,6 @@ body {
 
   width: 100%;
   max-width: 1200px;
-
-}
-
-
-@media (max-width: 1080px) {
-  .pokemon-team-display {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
-
-
-@media (max-width: 750px) {
-  .pokemon-team-display {
-    width: 100%;
-    max-width: 440px;
-    grid-template-columns: 1fr;
-    margin: 0 auto;
-  }
-  .input-container {
-    flex-direction: column;
-  }
-
-  .input-container-right button, .input-container-left select {
-    font-size: 0.9rem;
-  }
-
-  .input-container-left,
-  .input-container-right {
-    display: flex;
-    justify-content: space-around;
-    align-items: stretch;
-    gap: 14px;
-  }
-
-  .header {
-    font-size: 1.5rem;
-  }
 
 }
 
@@ -490,6 +452,8 @@ body {
   align-items: center;
   gap: 8px;
   font-size: 1rem;
+  padding: 0 5px;
+  flex-shrink: 0;
 }
 
 .theme-switch input {
@@ -526,4 +490,44 @@ body {
 
 .theme-switch input:checked+.slider::before {
   transform: translateX(24px);
+}
+
+@media (max-width: 1080px) {
+  .pokemon-team-display {
+    grid-template-columns: repeat(2, 1fr);
+    padding: 20px;
+  }
+}
+
+
+@media (max-width: 750px) {
+  .pokemon-team-display {
+    width: 100%;
+    max-width: 440px;
+    grid-template-columns: 1fr;
+    margin: 0 auto;
+    padding: 0;
+  }
+  .input-container {
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .input-container-right button, .input-container-left select {
+    font-size: 0.9rem;
+  }
+
+  .input-container-left,
+  .input-container-right {
+    justify-content: center;
+    align-items: stretch;
+    gap: 14px;
+  }
+
+
+
+  .header {
+    font-size: 1.5rem;
+  }
+
 }
