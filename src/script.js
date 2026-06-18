@@ -33,6 +33,10 @@ const genFilter = document.getElementById("gen-selector");
 const loadingScreen = document.getElementById("loading");
 const mainApp = document.getElementById("app");
 const toggle = document.getElementById("theme-toggle");
+const clearBtn = document.getElementById("clear-all-btn");
+const exportProfileBtn = document.getElementById("export-profile-btn");
+const importProfileBtn = document.getElementById("import-profile-btn");
+const fileInput = document.getElementById("import-file");
 
 let allPokemon = [];
 
@@ -82,9 +86,6 @@ async function loadParty() {
             }
 
             await new Promise(resolve => setTimeout(resolve, 400));
-
-
-
 
 
             abilitySelect.value = savedCard.ability;
@@ -174,8 +175,10 @@ async function populateItemSelects() {
 
         const sortedItems = data.items.sort((a, b) => a.name.localeCompare(b.name));
 
-        document.querySelectorAll(".item-select").forEach(select => {
-            select.innerHTML = "";
+        const itemSelects = document.querySelectorAll(".item-select");
+
+        itemSelects.forEach(select => {
+            select.innerHTML = '<option value="" disabled selected hidden>Item</option>';
             sortedItems.forEach(item => {
                 const option = document.createElement("Option");
                 option.value = item.name;
@@ -208,6 +211,82 @@ toggle.addEventListener("change", () => {
         toggle.checked ? "darkmode" : "light"
     );
 });
+
+clearBtn.addEventListener("click", () => {
+
+
+    pokemonCards.forEach(card => {
+        const sprite = card.querySelector(".pokemon-img");
+        const pokemonSelect = card.querySelector(".pokemon-select");
+        const abilitySelect = card.querySelector(".ability-select");
+        const moveSelects = card.querySelectorAll(".move-select");
+        const pokemonTypeContainer = card.querySelector(".pokemon-type");
+        const itemSelect = card.querySelector(".item-select");
+
+        moveSelects.forEach(select => {
+            select.value = '';
+            select.className = "";
+        })
+
+        abilitySelect.value = "";
+        pokemonSelect.value = "";
+        itemSelect.value = "";
+        sprite.src = "/assets/unknown_sprite.png";
+
+        pokemonTypeContainer.innerHTML = "";
+    });
+
+    saveParty();
+});
+
+fileInput.addEventListener("change", (event) => {
+    const file = event.target.files[0];
+
+    if (!file) return;
+
+    const reader = new FileReader();
+
+    reader.onload = function (e) {
+
+        try {
+            const data = JSON.parse(e.target.result);
+
+            sessionStorage.setItem("pokemonParty", JSON.stringify(data));
+
+            loadingScreen.style.display = "block";
+            mainApp.style.display = "none";
+
+            loadParty();
+
+        } catch (err) {
+            alert("Invalid save file!");
+            console.error(err);
+        }
+    };
+    reader.readAsText(file);
+})
+
+exportProfileBtn.addEventListener("click", () => {
+
+    const json = sessionStorage.getItem("pokemonParty");
+
+    const blob = new Blob([json], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+
+    const a = document.createElement("a");
+
+    a.href = url;
+    a.download = "profile.json";
+    a.click();
+
+    URL.revokeObjectURL(url);
+})
+
+importProfileBtn.addEventListener("click", () => {
+    fileInput.click();
+});
+
+
 // CARDS LOGIC //
 
 pokemonCards.forEach(card => {
@@ -254,7 +333,7 @@ pokemonCards.forEach(card => {
                 abilitySelect.appendChild(option);
             });
 
-            currentMoves = await Promise.all(
+            currentMoves = (await Promise.all(
                 data.moves.map(async ({ move }) => {
 
                     try {
@@ -272,7 +351,7 @@ pokemonCards.forEach(card => {
                         return null;
                     }
                 })
-            );
+            )).filter(Boolean).sort((a, b) => a.name.localeCompare(b.name));
 
             currentMoves = currentMoves.filter(Boolean);
 
@@ -286,7 +365,7 @@ pokemonCards.forEach(card => {
     });
 
     function buildMoveOptionsHTML(excludeNames, selectedName) {
-        let html = '<option value=""></option>';
+        let html = '<option value="">Move</option>';
 
         currentMoves.forEach(move => {
             const isExcluded =

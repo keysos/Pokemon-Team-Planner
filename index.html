@@ -35,39 +35,56 @@
 
         <div id="app">
 
-            <div class="filter-container">
-                <select id="type-selector" class="type-select" name="type-filter">
-                    <option value="">All Types</option>
-                    <option value="bug" class="bug">Bug</option>
-                    <option value="dark" class="dark">Dark</option>
-                    <option value="dragon" class="dragon">Dragon</option>
-                    <option value="electric" class="electric">Electric</option>
-                    <option value="fairy" class="fairy">Fairy</option>
-                    <option value="fighting" class="fighting">Fighting</option>
-                    <option value="fire" class="fire">Fire</option>
-                    <option value="flying" class="flying">Flying</option>
-                    <option value="ghost" class="ghost">Ghost</option>
-                    <option value="grass" class="grass">Grass</option>
-                    <option value="ground" class="ground">Ground</option>
-                    <option value="ice" class="ice">Ice</option>
-                    <option value="normal" class="normal">Normal</option>
-                    <option value="poison" class="poison">Poison</option>
-                    <option value="psychic" class="psychic">Psychic</option>
-                    <option value="rock" class="rock">Rock</option>
-                    <option value="steel" class="steel">Steel</option>
-                    <option value="water" class="water">Water</option>
-                </select>
+            <div class="input-container">
 
-                <select id="gen-selector" class="gen-select" name="gen-filter">
-                    <option value="">All Regions</option>
-                    <option value="1">Kanto</option>
-                    <option value="2">Johto</option>
-                    <option value="3">Hoenn</option>
-                    <option value="4">Sinnoh</option>
-                    <option value="5">Unova</option>
-                </select>
+                <div class="input-container-left">
+                    <select id="type-selector" class="type-select" name="type-filter">
+                        <option value="">All Types</option>
+                        <option value="bug" class="bug">Bug</option>
+                        <option value="dark" class="dark">Dark</option>
+                        <option value="dragon" class="dragon">Dragon</option>
+                        <option value="electric" class="electric">Electric</option>
+                        <option value="fairy" class="fairy">Fairy</option>
+                        <option value="fighting" class="fighting">Fighting</option>
+                        <option value="fire" class="fire">Fire</option>
+                        <option value="flying" class="flying">Flying</option>
+                        <option value="ghost" class="ghost">Ghost</option>
+                        <option value="grass" class="grass">Grass</option>
+                        <option value="ground" class="ground">Ground</option>
+                        <option value="ice" class="ice">Ice</option>
+                        <option value="normal" class="normal">Normal</option>
+                        <option value="poison" class="poison">Poison</option>
+                        <option value="psychic" class="psychic">Psychic</option>
+                        <option value="rock" class="rock">Rock</option>
+                        <option value="steel" class="steel">Steel</option>
+                        <option value="water" class="water">Water</option>
+                    </select>
 
+                    <select id="gen-selector" class="gen-select" name="gen-filter">
+                        <option value="">All Regions</option>
+                        <option value="1">Kanto</option>
+                        <option value="2">Johto</option>
+                        <option value="3">Hoenn</option>
+                        <option value="4">Sinnoh</option>
+                        <option value="5">Unova</option>
+                    </select>
+                </div>
 
+                <div class="input-container-right">
+                    <button id="clear-all-btn" class="button">
+                        Clear All
+                    </button>
+
+                    <button id="export-profile-btn" class="button">
+                        Export Profile
+                    </button>
+
+                    <input type="file" id="import-file" accept="application/json" hidden />
+
+                    <button id="import-profile-btn" class="button">
+                        Import Profile
+                    </button>
+                </div>
             </div>
 
             <section class="pokemon-party-display">

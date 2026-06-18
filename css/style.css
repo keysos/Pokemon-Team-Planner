@@ -99,7 +99,7 @@ body {
   font-size: 1.2rem;
 }
 
-.filter-container {
+.input-container {
   display: flex;
   margin-bottom: 40px;
   width: 100%;
@@ -153,10 +153,12 @@ body {
 
 @media (max-width: 750px) {
   .pokemon-party-display {
+    width: 80%;
     grid-template-columns: 1fr;
+    margin: 0 auto;
   }
 
-  .filter-container {
+  .input-container {
     justify-content: space-around;
   }
 
@@ -170,7 +172,7 @@ body {
 .pokemon-card {
   display: grid;
 
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: 1fr 1fr;
 
   grid-template-areas:
     "name moves"
@@ -178,7 +180,8 @@ body {
     "image moves"
     "item ability";
 
-  gap: 10px;
+  row-gap: 10px;
+  column-gap: 15px;
   width: 100%;
   min-height: 340px;
   min-width: 0;
@@ -205,6 +208,10 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
+  justify-self: center;
+
+  min-width: 0;
+  max-width: 160px;
 
   grid-area: image;
 
@@ -214,7 +221,7 @@ body {
 }
 
 .pokemon-img {
-  width: min(140px, 80%);
+  width: 120px;
   max-height: 170px;
   object-fit: contain;
   image-rendering: pixelated;
@@ -240,11 +247,14 @@ body {
 
 .pokemon-card select {
   width: 100%;
-  min-width: 0;
+  min-width: 0px;
   height: 35px;
   border: 1px solid var(--border);
-  border-radius: 10px;
+  border-radius: 10px 10px 0 0;
   
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 
   background-color: var(--surface);
 
@@ -255,21 +265,44 @@ body {
   transition: background 0.2s ease;
 }
 
-.filter-container select {
+.input-container-left > *, .input-container-right > * {
   width: 100%;
-  max-width: 200px;
-  padding: 10px;
+  font-size: 1.2rem;
   border: 1px solid var(--border);
   background-color: var(--surface);
   border-radius: 15px;
-  font-size: 1.4rem;
-  font-weight: 400;
   color: var(--text);
+  transition: background 0.2s ease;
+  cursor: pointer;
+}
 
+.input-container-left, .input-container-right {
+  display: flex;
+  width: 100%;
+  justify-content: space-around;
+}
+
+.input-container-left > *:hover, .input-container-right > *:hover {
+  background-color: var(--surface-hover);
+}
+
+.input-container-left select {
+  max-width: 200px;
+  padding: 10px;
+  border-radius: 10px 10px 0 0;
+}
+
+.input-container-right button {
+  max-width: 100px;
+  padding: 5px;
 }
 
 .field {
   position: relative;
+}
+
+.pokemon-name {
+  width: 100%;
 }
 
 .pokemon-card select:hover {
