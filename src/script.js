@@ -45,118 +45,138 @@ function saveParty() {
         moves: Array.from(card.querySelectorAll(".move-select")).map(s => s.value)
     }));
 
-    localStorage.setItem("pokemonParty", JSON.stringify(party));
+    sessionStorage.setItem("pokemonParty", JSON.stringify(party));
 }
 
 async function loadParty() {
-    const saved = localStorage.getItem("pokemonParty");
 
-    if (!saved) return;
+    try {
+        const saved = sessionStorage.getItem("pokemonParty");
 
-    const party = JSON.parse(saved);
+        if (!saved) return;
 
-    await populatePokemonSelects();
+        const party = JSON.parse(saved);
 
-    for (let i = 0; i < pokemonCards.length; i++) {
-        const card = pokemonCards[i];
-        const savedCard = party[i];
+        await populatePokemonSelects();
 
-        if (!savedCard?.pokemon) continue;
+        for (let i = 0; i < pokemonCards.length; i++) {
+            const card = pokemonCards[i];
+            const savedCard = party[i];
 
-        const pokemonSelect = card.querySelector(".pokemon-select");
-        const abilitySelect = card.querySelector(".ability-select");
-        const moveSelects = card.querySelectorAll(".move-select");
-        const itemSelect = card.querySelector(".item-select");
+            if (!savedCard?.pokemon) continue;
 
-        pokemonSelect.value = savedCard.pokemon;
-        pokemonSelect.dispatchEvent(new Event("change"));
+            const pokemonSelect = card.querySelector(".pokemon-select");
+            const abilitySelect = card.querySelector(".ability-select");
+            const moveSelects = card.querySelectorAll(".move-select");
+            const itemSelect = card.querySelector(".item-select");
 
-        await new Promise(resolve => setTimeout(resolve, 300));
+            pokemonSelect.value = savedCard.pokemon;
 
-        abilitySelect.value = savedCard.ability;
-        itemSelect.value = savedCard.item;
-        moveSelects.forEach((select, i) => {
-            select.value = savedCard.moves[i] ?? "";
-        });
+            try {
+                pokemonSelect.dispatchEvent(new Event("change"));
+            } catch (e) {
+                console.warn("Pokemon load failed:", e);
+            }
+
+            await new Promise(resolve => setTimeout(resolve, 300));
+
+            abilitySelect.value = savedCard.ability;
+            itemSelect.value = savedCard.item;
+            moveSelects.forEach((select, i) => {
+                select.value = savedCard.moves[i] ?? "";
+            });
+        }
+    } catch (err) {
+        console.warn("Pokemon load failed:", err);
+    } finally {
+        loadingScreen.style.display = "none";
+        mainApp.style.display = "flex";
     }
-    loadingScreen.style.display = "none";
-    mainApp.style.display = "flex";
-    saveParty();
 }
 
 // API + DATA //
 
 async function getFilteredPokemon() {
 
-    const type = typeFilter.value;
-    const gen = genFilter.value;
+    try {
+        const type = typeFilter.value;
+        const gen = genFilter.value;
 
-    let result = allPokemon;
+        let result = allPokemon;
 
-    if (type) {
-        const res = await fetch(`${POKEAPI_BASE}/type/${type}`);
-        const data = await res.json();
-        const typeNames = new Set(data.pokemon.map(p => p.pokemon.name));
-        result = result.filter(p => typeNames.has(p.name));
+        if (type) {
+            const res = await fetch(`${POKEAPI_BASE}/type/${type}`);
+            const data = await res.json();
+            const typeNames = new Set(data.pokemon.map(p => p.pokemon.name));
+            result = result.filter(p => typeNames.has(p.name));
+        }
+
+        if (gen) {
+            const [min, max] = GEN_RANGES[gen];
+            result = result.filter(p => {
+                const num = getDexNumber(p.url);
+                return num >= min && num <= max;
+            });
+        }
+
+        return result;
+    } catch (err) {
+        console.warn("Type and gen filter failed:", err);
     }
-
-    if (gen) {
-        const [min, max] = GEN_RANGES[gen];
-        result = result.filter(p => {
-            const num = getDexNumber(p.url);
-            return num >= min && num <= max;
-        });
-    }
-
-    return result;
 }
 
 async function populatePokemonSelects() {
 
-    const filtered = await getFilteredPokemon();
-    const selects = document.querySelectorAll(".pokemon-select");
+    try {
+        const filtered = await getFilteredPokemon();
+        const selects = document.querySelectorAll(".pokemon-select");
 
-    selects.forEach(select => {
-        const current = select.value;
+        selects.forEach(select => {
+            const current = select.value;
 
-        select.innerHTML = '<option value="" disabled selected hidden>Name</option>';
+            select.innerHTML = '<option value="" disabled selected hidden>Name</option>';
 
-        filtered.forEach(pokemon => {
-            const option = document.createElement("option");
-            option.value = pokemon.name;
-            option.textContent = formatName(pokemon.name);
-            select.appendChild(option);
+            filtered.forEach(pokemon => {
+                const option = document.createElement("option");
+                option.value = pokemon.name;
+                option.textContent = formatName(pokemon.name);
+                select.appendChild(option);
+            });
+
+            if (filtered.some(p => p.name === current)) {
+                select.value = current;
+            } else if (current) {
+                const option = document.createElement("option");
+                option.value = current;
+                option.textContent = formatName(current);
+                option.disabled = true;
+                select.appendChild(option);
+                select.value = current;
+            }
         });
-
-        if (filtered.some(p => p.name === current)) {
-            select.value = current;
-        } else if (current) {
-            const option = document.createElement("option");
-            option.value = current;
-            option.textContent = formatName(current);
-            option.disabled = true;
-            select.appendChild(option);
-            select.value = current;
-        }
-    });
+    } catch (err) {
+        console.error("Failed to load pokemons", err);
+    }
 }
 async function populateItemSelects() {
+    try {
+        const res = await fetch(`${POKEAPI_BASE}/item-attribute/holdable`);
+        const data = await res.json();
 
-    const res = await fetch(`${POKEAPI_BASE}/item-attribute/holdable`);
-    const data = await res.json();
+        const sortedItems = data.items.sort((a, b) => a.name.localeCompare(b.name));
 
-    const sortedItems = data.items.sort((a, b) => a.name.localeCompare(b.name));
-
-    document.querySelectorAll(".item-select").forEach(select => {
-        
-        select.innerHTML = "";
-        sortedItems.forEach(item => {
-            const option = document.createElement("Option");
-            option.value = item.name;
-            option.textContent = formatName(item.name);
-            select.appendChild(option);
+        document.querySelectorAll(".item-select").forEach(select => {
+            select.innerHTML = "";
+            sortedItems.forEach(item => {
+                const option = document.createElement("Option");
+                option.value = item.name;
+                option.textContent = formatName(item.name);
+                select.appendChild(option);
+            })
         })
-    })
+    } catch (err) {
+        console.error("Item load failed:", err);
+    }
 }
 
 // GLOBAL EVENT LISTENERS //
@@ -174,7 +194,7 @@ toggle.addEventListener("change", () => {
         toggle.checked
     );
 
-    localStorage.setItem(
+    sessionStorage.setItem(
         "theme",
         toggle.checked ? "darkmode" : "light"
     );
@@ -194,53 +214,65 @@ pokemonCards.forEach(card => {
     moveSelects.forEach(select => select.disabled = true);
 
     pokemonSelect.addEventListener("change", async e => {
-        const pokemonName = e.target.value;
 
-        if (!pokemonName) return;
+        try {
+            const pokemonName = e.target.value;
 
-        abilitySelect.disabled = false;
-        moveSelects.forEach(select => select.disabled = false);
+            if (!pokemonName) return;
 
-        const res = await fetch(`${POKEAPI_BASE}/pokemon/${pokemonName}`);
-        const data = await res.json();
+            abilitySelect.disabled = false;
+            moveSelects.forEach(select => select.disabled = false);
 
-        sprite.src = data.sprites.versions["generation-v"]["black-white"].animated.front_default;
+            const res = await fetch(`${POKEAPI_BASE}/pokemon/${pokemonName}`);
+            const data = await res.json();
 
-        pokemonTypeContainer.innerHTML = '';
+            sprite.src = data.sprites.versions["generation-v"]["black-white"].animated.front_default;
 
-        data.types.forEach(entry => {
-            const div = document.createElement("div");
-            div.classList.add("type", entry.type.name);
-            div.textContent = formatName(entry.type.name);
-            pokemonTypeContainer.appendChild(div);
-        })
+            pokemonTypeContainer.innerHTML = '';
 
-        data.abilities.forEach(entry => {
-            const option = document.createElement("option");
-            option.value = entry.ability.name;
-            option.textContent = formatName(entry.ability.name);
-            abilitySelect.appendChild(option);
-        });
-
-        currentMoves = await Promise.all(
-            data.moves.map(async ({ move }) => {
-
-                const res =
-                    await fetch(move.url);
-
-                const moveData =
-                    await res.json();
-
-                return {
-                    name: move.name,
-                    type: moveData.type.name
-                };
+            data.types.forEach(entry => {
+                const div = document.createElement("div");
+                div.classList.add("type", entry.type.name);
+                div.textContent = formatName(entry.type.name);
+                pokemonTypeContainer.appendChild(div);
             })
-        );
 
-        updateMoveOptions();
+            data.abilities.forEach(entry => {
+                const option = document.createElement("option");
+                option.value = entry.ability.name;
+                option.textContent = formatName(entry.ability.name);
+                abilitySelect.appendChild(option);
+            });
 
-        saveParty();
+            currentMoves = await Promise.all(
+                data.moves.map(async ({ move }) => {
+
+                    try {
+                        const res =
+                            await fetch(move.url);
+
+                        const moveData =
+                            await res.json();
+
+                        return {
+                            name: move.name,
+                            type: moveData.type.name
+                        };
+                    } catch (err) {
+                        return null;
+                    }
+                })
+            );
+
+            currentMoves = currentMoves.filter(Boolean);
+
+            updateMoveOptions();
+
+            saveParty();
+        } catch (err) {
+            console.error("Pokemon load failed:", err);
+        }
+
     });
 
     function buildMoveOptionsHTML(excludeNames, selectedName) {
@@ -288,16 +320,25 @@ pokemonCards.forEach(card => {
 // MAIN CORE STARTUP
 
 async function init() {
-    const res = await fetch(`${POKEAPI_BASE}/pokemon?limit=${POKEMON_LIMIT}`);
-    const data = await res.json();
-    allPokemon = data.results;
 
-    await populatePokemonSelects();
-    await populateItemSelects();
-    await loadParty();
+    try {
+        const res = await fetch(`${POKEAPI_BASE}/pokemon?limit=${POKEMON_LIMIT}`);
+        const data = await res.json();
+        allPokemon = data.results;
+
+        await populatePokemonSelects();
+        await populateItemSelects();
+        await loadParty();
+    } catch (err) {
+        console.error("Init failed:", err);
+    } finally {
+        loadingScreen.style.display = "none";
+        mainApp.style.display = "flex";
+    }
+
 }
 
-const savedTheme = localStorage.getItem("theme");
+const savedTheme = sessionStorage.getItem("theme");
 
 if (savedTheme === "darkmode") {
     document.body.classList.add("darkmode");
