@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pokemon Party Planner</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+
+    <header class="header">
+        <h1>Pokemon Party Planner</h1>
+        <p>For Generation 1 to 3</p>
+    </header>
+
+
+    <main class="main">
+        <section class="party-display">
+            <form class="pokemon-card-form">
+                <article class="pokemon-card">
+
+                    <div class="field pokemon-name">
+                        <label for="pokemon-name" class="visually-hidden">Name</label>
+                        <select id="pokemon-name" class="pokemon-select" name="pokemon-name">
+                            <option value="" disabled selected hidden>Name</option>
+                        </select>
+                    </div>
+
+                    <div class="pokemon-image">
+                        <img id="pokemon-img" src="assets/unknown_pokemon_sprite.png" alt="Selected Pokemon sprite">
+                    </div>
+
+                    <div class="field pokemon-item">
+                        <label for="pokemon-item" class="visually-hidden">Item</label>
+                        <select id="pokemon-item" class="item-select" name="pokemon-item">
+                            <option value="" disabled selected hidden>Item</option>
+                        </select>
+                    </div>
+
+
+                    <div class="moves">
+
+                        <div class="field move">
+                            <label for="move-1" class="visually-hidden">Move</label>
+                            <select id="move-1" class="move-select" name="move-1">
+                                <option value="" disabled selected hidden>Move</option>
+                            </select>
+                        </div>
+                        <div class="field move">
+                            <label for="move-2" class="visually-hidden">Move</label>
+                            <select id="move-2" class="move-select" name="move-2">
+                                <option value="" disabled selected hidden>Move</option>
+                            </select>
+                        </div>
+
+                        <div class="field move">
+                            <label for="move-3" class="visually-hidden">Move</label>
+                            <select id="move-3" class="move-select" name="move-3">
+                                <option value="" disabled selected hidden>Move</option>
+                            </select>
+                        </div>
+
+                        <div class="field move" >
+                            <label for="move-4" class="visually-hidden">Move</label>
+                            <select id="move-4" class="move-select" name="move-4">
+                                <option value="" disabled selected hidden>Move</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="field pokemon-ability">
+                        <label for="pokemon-ability" class="visually-hidden">Ability</label>
+                        <select id="pokemon-ability" class="ability-select" name="pokemon-ability">
+                            <option value="" disabled selected hidden>Ability</option>
+                        </select>
+                    </div>
+
+                </article>
+                
+            </form>
+        </section>
+    </main>
+    <script src="js/script.js"></script>
+</body>
+
+</html>
