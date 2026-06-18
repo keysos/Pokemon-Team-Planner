@@ -18,10 +18,16 @@ pokemonCards.forEach(card => {
 
     let currentMoves = [];
 
+    abilitySelect.disabled = true;
+    moveSelects.forEach(select => select.disabled = true);
+
     pokemonSelect.addEventListener("change", async e => {
         const pokemonName = e.target.value;
 
         if (!pokemonName) return;
+
+        abilitySelect.disabled = false;
+        moveSelects.forEach(select => select.disabled = false);
 
         const res = await fetch(`${POKEAPI_BASE}/pokemon/${pokemonName}`);
         const data = await res.json();

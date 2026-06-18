@@ -35,7 +35,7 @@ html {
 body {
     display: flex;
     flex-direction: column;
-
+    color: var(--text);
     min-height: 100vh;
 
     background-color: var(--background);
@@ -124,11 +124,13 @@ body {
     grid-area: image;
 
     min-height: 170px;
+  
 }
 
 .pokemon-img {
     width: min(140px, 80%);
-    height: auto;
+    max-height: 170px;
+    object-fit: contain;
     image-rendering: pixelated;
 }
 
@@ -155,8 +157,23 @@ select {
     height: 25px;
     border: none;
     border-bottom: 1px solid black;
+    border-radius: 10px 10px 0 0;
     background-color: var(--card);
     font-size: 1.2rem;
+    cursor: pointer;
+    transition: background 0.2s ease;
+}
+
+select:hover,
+select:focus,
+select:active {
+    background-color: #126cb1;
+}
+
+select:disabled {
+    color: var(--text);
+    opacity: 0.9;
+    cursor: not-allowed;
 }
 
 /* Accessibility */
