@@ -544,8 +544,7 @@ body {
 
 .team-layout {
   display: flex;
-  gap: 20px;
-  max-width: 1700px;
+  max-width: 1600px;
   width: 100%;
   align-items: flex-start;
   justify-content: space-between;
