@@ -580,13 +580,14 @@ body {
 
   .pokemon-team-display {
     grid-template-columns: repeat(2, 1fr);
-    padding: 20px;
-    margin: 0 auto;
+    margin: 14px auto;
+    max-width: 800px;
+    width: 100%;
   }
 
   .pokemon-stats-display {
     width: 100%;
-    max-width: 740px;
+    max-width: 800px;
     margin: 0 auto;
   }
 
@@ -594,6 +595,10 @@ body {
     max-width: 740px;
     margin: 0 auto;
   } 
+
+  #app {
+    zoom: 100%;
+  }
 }
 
 
@@ -604,6 +609,10 @@ body {
     grid-template-columns: 1fr;
     margin: 0 auto;
     padding: 0;
+  }
+  
+  #app {
+    zoom: 100%;
   }
 
   .pokemon-stats-display {
