@@ -128,25 +128,25 @@ export function attachTooltips(team) {
         card.addEventListener("mouseenter", async () => {
             const type = card.dataset.type;
             const score = card.dataset.score;
-            
+
             // Build HTML with team pokemon and their weakness/resistance
             let tooltipHTML = `<strong>${formatName(type)}</strong>`;
-            
+
             // Add pokemon with their sprites
             if (team && team.length > 0) {
                 tooltipHTML += `<div class="tooltip-pokemon-grid">`;
-                
+
                 for (const pokemon of team) {
                     try {
                         const res = await fetch(`${POKEAPI_BASE}/pokemon/${pokemon.name}`);
                         const data = await res.json();
-                        
+
                         // Calculate multiplier for this pokemon against the attacking type
                         const multiplier = getDefensiveMultiplier(pokemon.types, type);
-                        
+
                         const sprite = data.sprites.versions["generation-viii"].icons.front_default
                         const statusLabel = multiplier > 1 ? "⚠️ WEAK" : multiplier < 1 ? "✓ RESIST" : "→ NORMAL";
-                        
+
                         tooltipHTML += `
                             <div class="tooltip-pokemon-item">
                                 <img src="${sprite}" class="tooltip-pokemon-sprite">
@@ -158,17 +158,25 @@ export function attachTooltips(team) {
                         console.error("Error fetching pokemon sprite:", err);
                     }
                 }
-                
+
                 tooltipHTML += `</div>`;
             }
-            
+
             tooltip.innerHTML = tooltipHTML;
             tooltip.style.display = "block";
         });
 
         card.addEventListener("mousemove", e => {
-            tooltip.style.left = `${e.clientX - tooltip.offsetWidth / 2}px`;
-            tooltip.style.top = `${e.clientY + 15}px`;
+            // Get the zoom level of the #app element
+            const app = document.getElementById("app");
+            const zoomLevel = window.getComputedStyle(app).zoom || 1;
+            
+            // Adjust coordinates based on zoom
+            const adjustedX = e.clientX / zoomLevel;
+            const adjustedY = e.clientY / zoomLevel;
+            
+            tooltip.style.left = `${adjustedX + 15}px`;
+            tooltip.style.top = `${adjustedY + 15}px`;
         });
 
         card.addEventListener("mouseleave", () => {
