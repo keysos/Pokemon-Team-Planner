@@ -130,7 +130,7 @@ export function attachTooltips(team) {
             const score = card.dataset.score;
             
             // Build HTML with team pokemon and their weakness/resistance
-            let tooltipHTML = `<strong>${formatName(type)}</strong><br><small>Defense Score: ${score > 0 ? "+" : ""}${score}</small><br><br>`;
+            let tooltipHTML = `<strong>${formatName(type)}</strong>`;
             
             // Add pokemon with their sprites
             if (team && team.length > 0) {
