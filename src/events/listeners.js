@@ -9,7 +9,10 @@ import {
     pokemonCards,
     loadingScreen,
     mainApp,
-    tooltip
+    tooltip,
+    manualModal,
+    openManualBtn,
+    closeManualBtn
 } from "../dom.js";
 import { populatePokemonSelects } from "../ui/pokemonSelects.js";
 import { updateTeamDefense } from "../ui/defenseTable.js";
@@ -172,10 +175,10 @@ export function attachTooltips(team) {
         card.addEventListener("mousemove", e => {
             const app = document.getElementById("app");
             const zoomLevel = window.getComputedStyle(app).zoom || 1;
-            
+
             const adjustedX = e.clientX / zoomLevel;
             const adjustedY = e.clientY / zoomLevel;
-            
+
             tooltip.style.left = `${adjustedX + 15}px`;
             tooltip.style.top = `${adjustedY + 15}px`;
         });
@@ -192,7 +195,7 @@ export function attachAttackTooltips(coverage) {
 
     attackTypes.forEach(card => {
         card.addEventListener("mouseenter", async () => {
-            
+
             const type = card.dataset.type;
             const hits = coverage?.[type] ?? [];
 
@@ -280,3 +283,26 @@ export function attachAttackTooltips(coverage) {
         });
     });
 }
+
+openManualBtn.addEventListener("click", () => {
+    manualModal.showModal();
+})
+
+closeManualBtn.addEventListener("click", () => {
+    manualModal.close();
+})
+
+manualModal.addEventListener("click", (e) => {
+
+    const rect = manualModal.getBoundingClientRect();
+
+    const inside = 
+        e.clientX >= rect.left &&
+        e.clientX <= rect.right &&
+        e.clientY >= rect.top &&
+        e.clientY <= rect.bottom;
+
+    if (!inside) {
+        manualModal.close();
+    }
+})

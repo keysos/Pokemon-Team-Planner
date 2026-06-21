@@ -59,14 +59,6 @@
                     <option value="5">Unova</option>
                 </select>
 
-                <div class="theme-switch-wrapper">
-                    <span class="switch-label">Dark Mode</span>
-                    <label class="theme-switch">
-                        <input type="checkbox" id="theme-toggle">
-                        <span class="slider"></span>
-                    </label>
-                </div>
-
                 <button id="clear-all-btn" class="button">
                     Clear All
                 </button>
@@ -81,6 +73,86 @@
                     Import Profile
                 </button>
 
+                <button id="open-manual" class="button">Manual</button>
+
+                <dialog id="manual-modal" class="modal">
+                    <h2>How to Use</h2>
+
+                    <p>
+                        Use the filters at the top to search for Pokémon by type, then pick one for each slot in your
+                        team grid.
+                    </p>
+
+                    <p>
+                        Each card lets you set that Pokémon's <strong>moves</strong>, <strong>item</strong>, and
+                        <strong>ability</strong> using the dropdowns. Move and item boxes are color-coded by type so
+                        it's easy to scan your team at a glance.
+                    </p>
+
+                    <h3>Team Defence</h3>
+                    <p>
+                        This panel shows how well your team holds up against incoming attacks of each type. Hover over a
+                        type badge to see which of your Pokémon are weak or resistant to it. Each type is scored as
+                        follows:
+                    </p>
+
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Type Effectiveness Against You</th>
+                                <th>Points</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>No effect</td>
+                                <td>+1.5</td>
+                            </tr>
+                            <tr>
+                                <td>0.25x effective</td>
+                                <td>+1.5</td>
+                            </tr>
+                            <tr>
+                                <td>0.5x effective</td>
+                                <td>+1</td>
+                            </tr>
+                            <tr>
+                                <td>1x effective</td>
+                                <td>0</td>
+                            </tr>
+                            <tr>
+                                <td>2x super effective</td>
+                                <td>-1</td>
+                            </tr>
+                            <tr>
+                                <td>4x super effective</td>
+                                <td>-1.5</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <h3>Team Type Coverage</h3>
+                    <p>
+                        This panel shows how well your team can hit each type offensively. Hover over a type badge to
+                        see which of your Pokémon and moves are super effective (2x or 4x) against it.
+                    </p>
+
+                    <p>
+                        <em>Note: status moves don't deal damage, so they aren't counted toward this coverage.</em>
+                    </p>
+
+                    <p>
+                        Use the toggle switch to flip between light and dark mode — your choice is just for this
+                        session.
+                    </p>
+
+                    <p>
+                        When you're happy with your team, use <strong>Export</strong> to save it, and
+                        <strong>Import</strong> to load a previously saved team back in.
+                    </p>
+
+                    <button id="close-manual" class="button">GO BACK</button>
+                </dialog>
 
             </div>
             <div class="team-layout">
@@ -471,6 +543,30 @@
             </div>
         </div>
     </main>
+
+    <footer class="page-footer">
+        <div class="footer-group">
+            <span>Pokémon Team Builder</span>
+
+        </div>
+
+        <div class="footer-group">
+            <span>Data provided by PokéAPI</span>
+        </div>
+
+        <div class="footer-group">
+            <a href="https://github.com/keysos/Pokemon_Build_Planner" target="_blank">GitHub</a>
+            <span>v1.0.0</span>
+
+            <div class="theme-switch-wrapper">
+                <span class="switch-label">Dark Mode</span>
+                <label class="theme-switch">
+                    <input type="checkbox" id="theme-toggle">
+                    <span class="slider"></span>
+                </label>
+            </div>
+        </div>
+    </footer>
 
     <script type="module" src="src/index.js"></script>
 </body>

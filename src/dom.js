@@ -10,3 +10,6 @@ export const exportProfileBtn = document.getElementById("export-profile-btn");
 export const importProfileBtn = document.getElementById("import-profile-btn");
 export const fileInput = document.getElementById("import-file");
 export const tooltip = document.getElementById("type-tooltip");
+export const manualModal = document.getElementById("manual-modal");
+export const openManualBtn = document.getElementById("open-manual");
+export const closeManualBtn = document.getElementById("close-manual");
