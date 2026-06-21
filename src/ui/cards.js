@@ -3,6 +3,7 @@ import { formatName } from "../utils/helpers.js";
 import { pokemonCards } from "../dom.js";
 import { saveParty } from "../storage/partyStorage.js";
 import { updateTeamDefense } from "./defenseTable.js";
+import { updateTeamAttack } from "./attackTable.js";
 
 // Initialize card event listeners for each Pokemon card
 export function initializeCardListeners() {
@@ -57,7 +58,8 @@ export function initializeCardListeners() {
 
                             return {
                                 name: move.name,
-                                type: moveData.type.name
+                                type: moveData.type.name,
+                                damageClass: moveData.damage_class.name
                             };
                         } catch (err) {
                             return null;
@@ -71,6 +73,7 @@ export function initializeCardListeners() {
 
                 saveParty();
                 await updateTeamDefense();
+                await updateTeamAttack();
             } catch (err) {
                 console.error("Pokemon load failed:", err);
             }
@@ -86,7 +89,7 @@ export function initializeCardListeners() {
 
                 const selected = move.name === selectedName ? " selected" : "";
 
-                html += `<option value="${move.name}"${selected} class="${move.type}">${formatName(move.name)}</option>`;
+                html += `<option value="${move.name}"${selected} class="${move.type}" data-damage-class="${move.damageClass}">${formatName(move.name)}</option>`;
             });
 
             return html;
@@ -102,7 +105,8 @@ export function initializeCardListeners() {
 
                 const move = currentMoves.find(m => m.name === select.value);
 
-                select.className = `move-select ${move?.type ?? ""}`
+                select.className = `move-select ${move?.type ?? ""}`;
+                select.dataset.damageClass = move?.damageClass ?? "";
             });
         }
 
@@ -110,6 +114,7 @@ export function initializeCardListeners() {
             select.addEventListener("change", () => {
                 updateMoveOptions();
                 saveParty();
+                updateTeamAttack();
             });
         });
 

@@ -8,7 +8,8 @@ export function saveParty() {
         ability: card.querySelector(".ability-select").value,
         moves: Array.from(card.querySelectorAll(".move-select")).map(s => ({
             name: s.value,
-            type: s.className.replace("move-select", "").trim()
+            type: s.className.replace("move-select", "").trim(),
+            damageClass: s.dataset.damageClass || ""
         }))
     }));
 
@@ -53,6 +54,7 @@ export async function loadParty(populatePokemonSelects) {
                 const saved = savedCard.moves[i];
                 select.value = saved?.name ?? "";
                 select.className = `move-select ${saved?.type ?? ""}`.trim();
+                select.dataset.damageClass = saved?.damageClass ?? "";
             });
         }
     } catch (err) {

@@ -91,11 +91,15 @@ export async function populateItemSelects() {
     }
 }
 
-// Build an array with current team Pokemon and their types
+// Build an array with current team Pokemon, their types, their selected moves,
+// and their card slot index (used to dedupe scoring safely even if two cards
+// have the same species selected)
 export async function buildCurrentTeam() {
     const team = [];
+    const cards = Array.from(pokemonCards);
 
-    for (const card of pokemonCards) {
+    for (let index = 0; index < cards.length; index++) {
+        const card = cards[index];
         const pokemonName = card.querySelector(".pokemon-select").value;
 
         if (!pokemonName) continue;
@@ -103,10 +107,21 @@ export async function buildCurrentTeam() {
         try {
             const res = await fetch(`${POKEAPI_BASE}/pokemon/${pokemonName}`);
             const data = await res.json();
+            
+            const moveSelects = card.querySelectorAll(".move-select");
+            const moves = Array.from(moveSelects)
+                .map(select => ({
+                    name: select.value,
+                    type: select.className.replace("move-select", "").trim(),
+                    damageClass: select.dataset.damageClass || ""
+                }))
+                .filter(move => move.name && move.type);
 
             team.push({
+                index,
                 name: pokemonName,
-                types: data.types.map(t => t.type.name)
+                types: data.types.map(t => t.type.name),
+                moves
             });
         } catch (err) {
             console.error(err);

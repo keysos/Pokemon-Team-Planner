@@ -2,6 +2,7 @@
 import { initializeCardListeners } from "./ui/cards.js";
 import { populatePokemonSelects, populateItemSelects, initializeAllPokemon } from "./ui/pokemonSelects.js";
 import { updateTeamDefense } from "./ui/defenseTable.js";
+import { updateTeamAttack } from "./ui/attackTable.js";
 
 // Import storage
 import { loadParty, saveParty } from "./storage/partyStorage.js";
@@ -40,6 +41,7 @@ async function init() {
             loadingScreen.style.display = "none";
             mainApp.style.display = "flex";
             await updateTeamDefense();
+            await updateTeamAttack();
         });
 
         // Initialize card event listeners
@@ -48,6 +50,7 @@ async function init() {
         // Load saved party and update UI
         await loadParty(populatePokemonSelects);
         await updateTeamDefense();
+        await updateTeamAttack();
     } catch (err) {
         console.error("Init failed:", err);
     } finally {

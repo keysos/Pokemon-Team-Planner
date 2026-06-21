@@ -13,6 +13,7 @@ import {
 } from "../dom.js";
 import { populatePokemonSelects } from "../ui/pokemonSelects.js";
 import { updateTeamDefense } from "../ui/defenseTable.js";
+import { updateTeamAttack } from "../ui/attackTable.js";
 import { saveParty } from "../storage/partyStorage.js";
 import { formatName } from "../utils/helpers.js";
 import { getDefensiveMultiplier } from "../utils/defenseCalculator.js";
@@ -56,13 +57,14 @@ export function setupClearButton() {
             abilitySelect.value = "";
             pokemonSelect.value = "";
             itemSelect.value = "";
-            sprite.src = "/assets/unknown_sprite.png";
+            sprite.src = "assets/unknown_sprite.png";
 
             pokemonTypeContainer.innerHTML = "";
         });
 
         saveParty();
         updateTeamDefense();
+        updateTeamAttack();
     });
 }
 
@@ -168,14 +170,74 @@ export function attachTooltips(team) {
         });
 
         card.addEventListener("mousemove", e => {
-            // Get the zoom level of the #app element
             const app = document.getElementById("app");
             const zoomLevel = window.getComputedStyle(app).zoom || 1;
             
-            // Adjust coordinates based on zoom
             const adjustedX = e.clientX / zoomLevel;
             const adjustedY = e.clientY / zoomLevel;
             
+            tooltip.style.left = `${adjustedX + 15}px`;
+            tooltip.style.top = `${adjustedY + 15}px`;
+        });
+
+        card.addEventListener("mouseleave", () => {
+            tooltip.style.display = "none";
+        });
+    });
+}
+
+export function attachAttackTooltips(coverage) {
+    const POKEAPI_BASE = "https://pokeapi.co/api/v2";
+    const attackTypes = document.querySelectorAll("#team-attack-grid .defence-type");
+
+    attackTypes.forEach(card => {
+        card.addEventListener("mouseenter", async () => {
+            const type = card.dataset.type;
+            const hits = coverage?.[type] ?? [];
+
+            let tooltipHTML = `<strong>${formatName(type)}</strong>`;
+
+            if (hits.length > 0) {
+                const cols = Math.min(hits.length, 3);
+                tooltipHTML += `<div class="tooltip-pokemon-grid" style="--cols: ${cols};">`;
+
+                for (const hit of hits) {
+                    try {
+                        const res = await fetch(`${POKEAPI_BASE}/pokemon/${hit.pokemon}`);
+                        const data = await res.json();
+
+                        const sprite = data.sprites.versions["generation-viii"].icons.front_default;
+                        const label = hit.multiplier >= 4 ? "⚡ 4x" : "⚡ 2x";
+
+                        tooltipHTML += `
+                            <div class="tooltip-pokemon-item">
+                                <img src="${sprite}" class="tooltip-pokemon-sprite">
+                                <div>${formatName(hit.pokemon)}</div>
+                                <small>${formatName(hit.move)}</small>
+                                <small>${label}</small>
+                            </div>
+                        `;
+                    } catch (err) {
+                        console.error("Error fetching pokemon sprite:", err);
+                    }
+                }
+
+                tooltipHTML += `</div>`;
+            } else {
+                tooltipHTML += `<div class="tooltip-empty">No coverage yet</div>`;
+            }
+
+            tooltip.innerHTML = tooltipHTML;
+            tooltip.style.display = "block";
+        });
+
+        card.addEventListener("mousemove", e => {
+            const app = document.getElementById("app");
+            const zoomLevel = window.getComputedStyle(app).zoom || 1;
+
+            const adjustedX = e.clientX / zoomLevel;
+            const adjustedY = e.clientY / zoomLevel;
+
             tooltip.style.left = `${adjustedX + 15}px`;
             tooltip.style.top = `${adjustedY + 15}px`;
         });
