@@ -134,7 +134,8 @@ export function attachTooltips(team) {
 
             // Add pokemon with their sprites
             if (team && team.length > 0) {
-                tooltipHTML += `<div class="tooltip-pokemon-grid">`;
+                const cols = Math.min(team.length, 3);
+                tooltipHTML += `<div class="tooltip-pokemon-grid" style="--cols: ${cols};">`;
 
                 for (const pokemon of team) {
                     try {

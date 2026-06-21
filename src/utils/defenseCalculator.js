@@ -5,9 +5,7 @@ export function getDefensiveMultiplier(defendingTypes, attackType) {
     let multiplier = 1;
 
     defendingTypes.forEach(type => {
-        multiplier *= (
-            TABLE_TYPES[attackType]?.[type] ?? 1
-        );
+        multiplier *= (TABLE_TYPES[attackType]?.[type] ?? 1);
     });
 
     return multiplier;
