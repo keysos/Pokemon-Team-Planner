@@ -722,6 +722,7 @@ body {
   .team-slot-btn img,
   .slot-img {
     object-fit: contain;
+    image-rendering: pixelated;
     padding-bottom: 5px;
   }
 
