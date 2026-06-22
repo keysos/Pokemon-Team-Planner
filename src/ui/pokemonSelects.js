@@ -42,7 +42,7 @@ export async function populatePokemonSelects() {
         selects.forEach(select => {
             const current = select.value;
 
-            select.innerHTML = '<option value="" disabled selected hidden>Name</option>';
+            select.innerHTML = '<option value="" disabled selected hidden>Pokémon</option>';
 
             filtered.forEach(pokemon => {
                 const option = document.createElement("option");
