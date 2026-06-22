@@ -625,12 +625,12 @@ body {
   display: grid;
   grid-template-columns: repeat(var(--cols, 3), 1fr);
   grid-auto-flow: row;
-  gap: 8px;
+  gap: 12px;
 }
 
 .tooltip-pokemon-item {
   text-align: center;
-  font-size: 1rem;
+  font-size: 1.2rem;
 }
 
 .tooltip-pokemon-item small {
@@ -703,7 +703,7 @@ body {
     border-radius: 12px;
     border: 1px solid #35528d;
     background: var(--card);
-    color: white;
+    color: var(--text);
     font-size: 18px;
     overflow: hidden;
     cursor: pointer;

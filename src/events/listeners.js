@@ -189,9 +189,23 @@ export function attachTooltips(team) {
 
             const adjustedX = e.clientX / zoomLevel;
             const adjustedY = e.clientY / zoomLevel;
+            const offset = 15;
+            const margin = 8;
 
-            tooltip.style.left = `${adjustedX + 15}px`;
-            tooltip.style.top = `${adjustedY + 15}px`;
+            tooltip.style.left = `${adjustedX + offset}px`;
+            tooltip.style.top = `${adjustedY + offset}px`;
+
+            const rect = tooltip.getBoundingClientRect();
+
+            // Flip above the cursor if it would overflow the bottom edge
+            if (rect.bottom > window.innerHeight - margin) {
+                tooltip.style.top = `${adjustedY - rect.height - offset}px`;
+            }
+
+            // Pull it left if it would overflow the right edge
+            if (rect.right > window.innerWidth - margin) {
+                tooltip.style.left = `${adjustedX - rect.width - offset}px`;
+            }
         });
 
         card.addEventListener("mouseleave", () => {
@@ -272,7 +286,6 @@ export function attachAttackTooltips(coverage) {
             const offset = 15;
             const margin = 8;
 
-            // Place it first so we can measure its real rendered size
             tooltip.style.left = `${adjustedX + offset}px`;
             tooltip.style.top = `${adjustedY + offset}px`;
 
