@@ -12,7 +12,8 @@ import {
     tooltip,
     manualModal,
     openManualBtn,
-    closeManualBtn
+    closeManualBtn,
+    generateRandomTeamBtn
 } from "../dom.js";
 import { populatePokemonSelects } from "../ui/pokemonSelects.js";
 import { updateTeamDefense } from "../ui/defenseTable.js";
@@ -331,6 +332,63 @@ manualModal.addEventListener("click", (e) => {
     }
 })
 
+export function setupGenerateRandomTeamButton() {
+    generateRandomTeamBtn.addEventListener("click", async () => {
+        // Bypass the confirm dialog that clearBtn normally shows
+
+        loadingScreen.style.display = "block";
+        mainApp.style.display = "none";
+
+        pokemonCards.forEach((card) => {
+            const sprite = card.querySelector(".pokemon-img");
+            const pokemonSelect = card.querySelector(".pokemon-select");
+            const abilitySelect = card.querySelector(".ability-select");
+            const moveSelects = card.querySelectorAll(".move-select");
+            const pokemonTypeContainer = card.querySelector(".pokemon-type");
+            const itemSelect = card.querySelector(".item-select");
+
+            moveSelects.forEach(select => {
+                select.value = '';
+                select.className = "";
+            });
+
+            abilitySelect.value = "";
+            pokemonSelect.value = "";
+            itemSelect.value = "";
+            sprite.src = "assets/unknown_sprite.png";
+            pokemonTypeContainer.innerHTML = "";
+        });
+
+
+        // Pick 6 unique random IDs (Gen 1–5, matching your 649 cap)
+        const team = [];
+        while (team.length < 6) {
+            const num = Math.floor(Math.random() * 649) + 1;
+            if (!team.includes(num)) team.push(num);
+        }
+
+        const names = await Promise.all(
+            team.map(async (id) => {
+                const res = await fetch(`https://pokeapi.co/api/v2/pokemon/${id}`);
+                const data = await res.json();
+                return data.name;
+            })
+        );
+
+        for (let i = 0; i < pokemonCards.length; i++) {
+            const card = pokemonCards[i];
+            const pokemonSelect = card.querySelector(".pokemon-select");
+
+            pokemonSelect.value = names[i];
+            pokemonSelect.dispatchEvent(new Event("change"));
+
+            await new Promise(resolve => setTimeout(resolve, 400));
+        }
+
+        loadingScreen.style.display = "none";
+        mainApp.style.display = "flex";
+    });
+}
 
 export function resetScroll() {
     manualModal.scrollTop = 0;

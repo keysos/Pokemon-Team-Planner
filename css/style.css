@@ -822,13 +822,25 @@ body {
     max-width: 450px;
     justify-items: center;
     align-items: center;
+    grid-template-areas:
+      "type   clear  region"
+      "export import random"
+      ".      manual .";
   }
 
   .input-container .button,
   .input-container select {
     font-size: 0.9rem !important;
     width: 100%;
-    max-width: 100px;
+    max-width: 140px;
+  }
+
+  #gen-selector {
+    grid-area: region;
+  }
+
+  #open-manual {
+    grid-area: manual;
   }
 
   .header {

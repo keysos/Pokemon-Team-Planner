@@ -16,7 +16,8 @@ import {
     setupClearButton,
     setupFileImport,
     setupExportButton,
-    setupImportButton
+    setupImportButton,
+    setupGenerateRandomTeamButton
 } from "./events/listeners.js";
 
 // Import DOM references
@@ -39,6 +40,7 @@ async function init() {
         setupExportButton();
         setupImportButton();
         setupModalHeight();
+        setupGenerateRandomTeamButton();
         setupFileImport(async () => {
             await loadParty(populatePokemonSelects);
             loadingScreen.style.display = "none";

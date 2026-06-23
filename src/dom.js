@@ -13,3 +13,4 @@ export const tooltip = document.getElementById("type-tooltip");
 export const manualModal = document.getElementById("manual-modal");
 export const openManualBtn = document.getElementById("open-manual");
 export const closeManualBtn = document.getElementById("close-manual");
+export const generateRandomTeamBtn = document.getElementById("generate-random-team");
