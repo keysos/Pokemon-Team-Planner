@@ -337,55 +337,38 @@ manualModal.addEventListener("click", (e) => {
 
 export function setupGenerateRandomTeamButton() {
     generateRandomTeamBtn.addEventListener("click", async () => {
-        // Bypass the confirm dialog that clearBtn normally shows
-
         loadingScreen.style.display = "block";
         mainApp.style.display = "none";
 
-        pokemonCards.forEach((card) => {
-            const sprite = card.querySelector(".pokemon-img");
-            const pokemonSelect = card.querySelector(".pokemon-select");
-            const abilitySelect = card.querySelector(".ability-select");
-            const moveSelects = card.querySelectorAll(".move-select");
-            const pokemonTypeContainer = card.querySelector(".pokemon-type");
-            const itemSelect = card.querySelector(".item-select");
+        clearBtn.click();
 
-            moveSelects.forEach(select => {
-                select.value = '';
-                select.className = "";
-            });
+        // Get all available Pokémon from the select
+        const pokemonOptions = Array.from(
+            pokemonCards[0].querySelector(".pokemon-select").options
+        )
+            .map((option) => option.value)
+            .filter(Boolean); // removes empty option
 
-            abilitySelect.value = "";
-            pokemonSelect.value = "";
-            itemSelect.value = "";
-            sprite.src = "assets/unknown_sprite.png";
-            pokemonTypeContainer.innerHTML = "";
-        });
-
-
-        // Pick 6 unique random IDs (Gen 1–5, matching your 649 cap)
-        const team = [];
-        while (team.length < 6) {
-            const num = Math.floor(Math.random() * 649) + 1;
-            if (!team.includes(num)) team.push(num);
+        // Fisher-Yates shuffle
+        for (let i = pokemonOptions.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [pokemonOptions[i], pokemonOptions[j]] = [
+                pokemonOptions[j],
+                pokemonOptions[i],
+            ];
         }
 
-        const names = await Promise.all(
-            team.map(async (id) => {
-                const res = await fetch(`https://pokeapi.co/api/v2/pokemon/${id}`);
-                const data = await res.json();
-                return data.name;
-            })
-        );
+        // Pick 6 unique Pokémon
+        const team = pokemonOptions.slice(0, 6);
 
-        for (let i = 0; i < pokemonCards.length; i++) {
+        for (let i = 0; i < pokemonCards.length && i < team.length; i++) {
             const card = pokemonCards[i];
             const pokemonSelect = card.querySelector(".pokemon-select");
 
-            pokemonSelect.value = names[i];
+            pokemonSelect.value = team[i];
             pokemonSelect.dispatchEvent(new Event("change"));
 
-            await new Promise(resolve => setTimeout(resolve, 400));
+            await new Promise((resolve) => setTimeout(resolve, 400));
         }
 
         loadingScreen.style.display = "none";
