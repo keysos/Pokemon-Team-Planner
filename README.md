@@ -5,6 +5,8 @@
 </p>
 A web-based Pokémon team builder that allows users to create and customize a Pokémon party with abilities, held items, and moves.
 
+https://pokemonteamplanner.netlify.app/
+
 ## Features
 
 - Build a team of up to 6 Pokémon
