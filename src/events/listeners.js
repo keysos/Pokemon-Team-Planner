@@ -43,43 +43,10 @@ export function setupThemeToggle() {
 // Handle clear all button
 export function setupClearButton() {
     clearBtn.addEventListener("click", () => {
-        if (!confirm("Clear all Pokemon from your team?")) return;
 
-        pokemonCards.forEach((card, index) => {
-            const sprite = card.querySelector(".pokemon-img");
-            const pokemonSelect = card.querySelector(".pokemon-select");
-            const abilitySelect = card.querySelector(".ability-select");
-            const moveSelects = card.querySelectorAll(".move-select");
-            const pokemonTypeContainer = card.querySelector(".pokemon-type");
-            const itemSelect = card.querySelector(".item-select");
+        if (!askConfirmation()) return;
 
-            moveSelects.forEach(select => {
-                select.value = '';
-                select.className = "";
-            })
-
-            abilitySelect.value = "";
-            pokemonSelect.value = "";
-            itemSelect.value = "";
-            sprite.src = "assets/unknown_sprite.png";
-
-            pokemonTypeContainer.innerHTML = "";
-
-            const button = document.querySelector(`.team-slot-btn[data-slot="${index}"]`);
-
-            if (button) {
-                const slotImg = button.querySelector(".slot-img");
-
-                slotImg.src = "";
-                button.classList.remove("has-pokemon");
-            }
-        });
-
-
-
-        saveParty();
-        updateTeamDefense();
-        updateTeamAttack();
+        clearTeam();
     });
 }
 
@@ -334,46 +301,28 @@ manualModal.addEventListener("click", (e) => {
 
 export function setupGenerateRandomTeamButton() {
     generateRandomTeamBtn.addEventListener("click", async () => {
-        // Bypass the confirm dialog that clearBtn normally shows
+
+        if (!askConfirmation()) return;
 
         loadingScreen.style.display = "block";
         mainApp.style.display = "none";
 
-        pokemonCards.forEach((card) => {
-            const sprite = card.querySelector(".pokemon-img");
-            const pokemonSelect = card.querySelector(".pokemon-select");
-            const abilitySelect = card.querySelector(".ability-select");
-            const moveSelects = card.querySelectorAll(".move-select");
-            const pokemonTypeContainer = card.querySelector(".pokemon-type");
-            const itemSelect = card.querySelector(".item-select");
+        clearTeam();
 
-            moveSelects.forEach(select => {
-                select.value = '';
-                select.className = "";
-            });
+        // Grab the options already sitting in one of the pokemon-select dropdowns
+        const sampleSelect = pokemonCards[0].querySelector(".pokemon-select");
+        const pool = Array.from(sampleSelect.options)
+            .filter(opt => opt.value && !opt.disabled)
+            .map(opt => opt.value);
 
-            abilitySelect.value = "";
-            pokemonSelect.value = "";
-            itemSelect.value = "";
-            sprite.src = "assets/unknown_sprite.png";
-            pokemonTypeContainer.innerHTML = "";
-        });
+        const names = [];
+        if (pool.length > 0) {
+            const shuffled = [...pool].sort(() => Math.random() - 0.5);
 
-
-        // Pick 6 unique random IDs (Gen 1–5, matching your 649 cap)
-        const team = [];
-        while (team.length < 6) {
-            const num = Math.floor(Math.random() * 649) + 1;
-            if (!team.includes(num)) team.push(num);
+            for (let i = 0; i < 6; i++) {
+                names.push(shuffled[i % shuffled.length]);
+            }
         }
-
-        const names = await Promise.all(
-            team.map(async (id) => {
-                const res = await fetch(`https://pokeapi.co/api/v2/pokemon/${id}`);
-                const data = await res.json();
-                return data.name;
-            })
-        );
 
         for (let i = 0; i < pokemonCards.length; i++) {
             const card = pokemonCards[i];
@@ -388,6 +337,47 @@ export function setupGenerateRandomTeamButton() {
         loadingScreen.style.display = "none";
         mainApp.style.display = "flex";
     });
+}
+
+function askConfirmation() {
+    return confirm("Clear all Pokemon from your team?");
+}
+
+function clearTeam() {
+
+    pokemonCards.forEach((card, index) => {
+        const sprite = card.querySelector(".pokemon-img");
+        const pokemonSelect = card.querySelector(".pokemon-select");
+        const abilitySelect = card.querySelector(".ability-select");
+        const moveSelects = card.querySelectorAll(".move-select");
+        const pokemonTypeContainer = card.querySelector(".pokemon-type");
+        const itemSelect = card.querySelector(".item-select");
+
+        moveSelects.forEach(select => {
+            select.value = '';
+            select.className = "";
+        })
+
+        abilitySelect.value = "";
+        pokemonSelect.value = "";
+        itemSelect.value = "";
+        sprite.src = "assets/unknown_sprite.png";
+
+        pokemonTypeContainer.innerHTML = "";
+
+        const button = document.querySelector(`.team-slot-btn[data-slot="${index}"]`);
+
+        if (button) {
+            const slotImg = button.querySelector(".slot-img");
+
+            slotImg.src = "";
+            button.classList.remove("has-pokemon");
+        }
+    });
+
+    saveParty();
+    updateTeamDefense();
+    updateTeamAttack();
 }
 
 export function resetScroll() {
